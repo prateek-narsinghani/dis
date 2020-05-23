@@ -24,4 +24,11 @@ public class RestAPI {
 	public static final String GET_ALL_BATCHES = "/getAllBatches/{session}/{ugOrPg}";
 	public static final String CREATE_BATCH = "/createBatch";
 	public static final String UPDATE_BATCH = "/updateBatch";
+
+	//Leave
+	public static final String APPLY_LEAVE = "/applyForLeave";
+
+	//Leave Settings
+	public static final String GET_LEAVE_SETTINGS = "/getLeaveSettings";
+	public static final String UPDATE_LEAVE_SETTINGS="/updateLeaveSettings";
 }

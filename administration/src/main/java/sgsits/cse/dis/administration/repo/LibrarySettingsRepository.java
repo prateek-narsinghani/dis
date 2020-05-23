@@ -9,7 +9,7 @@ import sgsits.cse.dis.administration.model.LibrarySettings;
  * @author Arjit Mishra
  * @since 2-DEC-2019
  */
-public interface LibrarySettingsRepository extends JpaRepository<LibrarySettings, String> {
+public interface LibrarySettingsRepository extends JpaRepository<LibrarySettings, Long> {
 	
 
 }

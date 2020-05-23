@@ -22,7 +22,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByMobileNo(long mobileNo);
 	List<User> findAllByEnabledAndUserTypeNot(boolean enabled, String userType);
-
-
-
 }

@@ -309,7 +309,6 @@ public class LibraryServicesImpl implements LibraryServices, Serializable {
 	@Override
 	public List<LibrarySettings> getSetting() {
 		return librarySettingsRepository.findAll();
-
 	}
 
 
