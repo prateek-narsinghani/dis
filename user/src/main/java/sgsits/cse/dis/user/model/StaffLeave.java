@@ -47,6 +47,7 @@ public class StaffLeave {
     
     private String typeOfLeave;
 
+    private String userId;
     
     public StaffLeave(){}
 
@@ -164,5 +165,13 @@ public class StaffLeave {
                 + ", fromDate=" + fromDate + ", halfdayFullday=" + halfdayFullday + ", leaveId=" + leaveId
                 + ", modifiedBy=" + modifiedBy + ", modifiedDate=" + modifiedDate + ", remarks=" + remarks + ", status="
                 + status + ", subject=" + subject + ", toDate=" + toDate + ", typeOfLeave=" + typeOfLeave + "]";
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

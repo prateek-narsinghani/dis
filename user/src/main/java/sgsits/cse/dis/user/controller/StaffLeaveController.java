@@ -1,5 +1,7 @@
 package sgsits.cse.dis.user.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
@@ -17,9 +21,11 @@ import sgsits.cse.dis.user.constants.RestAPI;
 import sgsits.cse.dis.user.jwt.JwtResolver;
 import sgsits.cse.dis.user.message.request.ApplyStaffLeaveForm;
 import sgsits.cse.dis.user.message.request.StaffLeaveSettingsForm;
+import sgsits.cse.dis.user.message.request.UpdateStatusForm;
+import sgsits.cse.dis.user.message.response.StaffLeaveLeftResponse;
 import sgsits.cse.dis.user.message.response.StaffLeaveResponse;
+import sgsits.cse.dis.user.model.StaffLeave;
 import sgsits.cse.dis.user.model.StaffLeaveSettings;
-import sgsits.cse.dis.user.repo.StaffLeaveSettingsRepository;
 import sgsits.cse.dis.user.serviceImpl.StaffLeaveServiceImpl;
 
 @CrossOrigin(origins = "*")
@@ -28,10 +34,7 @@ import sgsits.cse.dis.user.serviceImpl.StaffLeaveServiceImpl;
 public class StaffLeaveController {
 
     @Autowired
-    private StaffLeaveServiceImpl staffLeaveServiceImpl;
-
-    @Autowired
-    private StaffLeaveSettingsRepository staffLeaveSettingsRepository; 
+    private StaffLeaveServiceImpl staffLeaveServiceImpl; 
 
     JwtResolver jwtResolver =new JwtResolver();
 
@@ -67,19 +70,50 @@ public class StaffLeaveController {
     }
 
 
-    @GetMapping(path="/getLeave")
-    public StaffLeaveSettings getLeave(HttpServletRequest request)
+    @ApiOperation(value="apply for leave",response=StaffLeave.class,httpMethod = "GET",produces = "application/json")
+    @GetMapping(path=RestAPI.GET_LEAVE_BY_STATUS,produces = "application/json")
+    public List<StaffLeave> getLeaveByStatus(HttpServletRequest request,@PathVariable String status)
     {
-        //getting latest record
-
-        StaffLeaveSettings top =  staffLeaveSettingsRepository.findTopByOrderByIdDesc();
-        return top;
-        
-        // String token=request.getHeader("Authorization");
-        // return jwtResolver.getUserTypeFromJwtToken(token);
-        // return staffLeaveLeftRepository.findByUserIdAndYear(jwtResolver.getIdFromJwtToken(token), 2020);
-        // return staffLeaveRepository.findByAppliedBy("uthakar");
+        return staffLeaveServiceImpl.getLeavesByStatus(status);
     }
+
+    
+    @ApiOperation(value = "update staff leave status",httpMethod = "PUT",produces = "text/plain")
+    @PutMapping(path=RestAPI.UPDATE_STATUS_BY_LEAVE_ID,produces = "text/plain")
+    public ResponseEntity<String> updateStatus(@RequestBody UpdateStatusForm updateStatus,HttpServletRequest request)
+    {
+        staffLeaveServiceImpl.updateStatusByLeaveId(updateStatus); 
+        return new ResponseEntity<String>("Status Updated.",HttpStatus.OK);  
+    }
+
+    
+    @ApiOperation(value = "get leaves left by user name",httpMethod = "GET",produces = "application/json")
+    @GetMapping(path=RestAPI.GET_LEAVES_LEFT_BY_NAME,produces = "application/json")
+    public ResponseEntity<List<StaffLeaveLeftResponse>> getLeavesLeft(@RequestParam("name") String userName)
+    {
+        return new ResponseEntity<List<StaffLeaveLeftResponse>>(staffLeaveServiceImpl.getLeaveLeft(userName),HttpStatus.OK);
+    }
+
+
+    @ApiOperation(value = "get all leaves applied by name",httpMethod = "GET",produces = "application/json")
+    @GetMapping(path=RestAPI.GET_ALL_LEAVES_FOR_FACULTY,produces = "application/json")
+    public ResponseEntity<List<StaffLeave>> getAllLeaves(@RequestParam("name") String name)
+    {
+        return new ResponseEntity<List<StaffLeave>>(staffLeaveServiceImpl.getAllLeavesByName(name),HttpStatus.OK);
+    }
+
+    // @GetMapping(path="/play")
+    // public List<StaffLeave> updateStatus()
+    // {
+
+    //     // StaffLeaveSettings top =  staffLeaveSettingsRepository.findTopByOrderByIdDesc();
+        
+    //     return staffLeaveServiceImpl.getAllLeavesByName();
+    //     // String token=request.getHeader("Authorization");
+    //     // return jwtResolver.getUserTypeFromJwtToken(token);
+    //     // return staffLeaveLeftRepository.findByUserIdAndYear(jwtResolver.getIdFromJwtToken(token), 2020);
+    //     // return staffLeaveRepository.findByAppliedBy("uthakar");
+    // }
 }
 
 // { 
@@ -93,5 +127,3 @@ public class StaffLeaveController {
 //     "typeOfLeave": "EL"
 	
 // }
-
-// eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhM2NmOTRlNC0yMGIxLTExZWEtYmJkOS1hY2QxYjhjOTMxZjciLCJzdWIiOiJ1dGhha2FyIiwiYXVkIjoiaGVhZCIsImlhdCI6MTU4OTUzMTc4MSwiZXhwIjoxNTg5NjE4MTgxfQ.8b7rB6BYUzqBADf3I7JNs9J-Jc5bWrwm2UG91Iz-kDvvtH8fihPBR5dfADxw8sEN0mvXSRowtFUcC6LcnfEbww

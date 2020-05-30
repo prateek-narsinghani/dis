@@ -27,6 +27,10 @@ public class RestAPI {
 
 	//Leave
 	public static final String APPLY_LEAVE = "/applyForLeave";
+	public static final String GET_LEAVE_BY_STATUS="/getLeaves/{status}";
+	public static final String GET_LEAVES_LEFT_BY_NAME="/getLeavesLeft"; //Pass parameter name
+	public static final String GET_ALL_LEAVES_FOR_FACULTY="/getAllLeaves"; //Pass parameter name
+	public static final String UPDATE_STATUS_BY_LEAVE_ID="/updateStatus";
 
 	//Leave Settings
 	public static final String GET_LEAVE_SETTINGS = "/getLeaveSettings";

@@ -29,4 +29,5 @@ public interface StaffRepository extends JpaRepository<StaffProfile, String>{
 	StaffProfile findNameByUserId(String userId);
 	List<StaffProfile> findByNameContainingIgnoreCase(String name);
 	Optional<StaffProfile> findById(String id);
+	Optional<StaffProfile> findByName(String name);
 }
